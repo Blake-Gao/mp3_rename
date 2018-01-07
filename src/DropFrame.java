@@ -4,10 +4,13 @@ import com.mpatric.mp3agic.ID3v24Tag;
 import com.mpatric.mp3agic.Mp3File;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class DropFrame extends JPanel implements ActionListener {
@@ -97,7 +100,8 @@ public class DropFrame extends JPanel implements ActionListener {
 
             //if artist and title field are filled
             if (!Strings.isNullOrEmpty(artistField.getText()) &&
-                    Strings.isNullOrEmpty(titleField.getText())){
+                    !Strings.isNullOrEmpty(titleField.getText())){
+
                 Mp3File mp3file = new Mp3File(file.getAbsolutePath());
                 ID3v2 id3v2Tag;
                 if (mp3file.hasId3v2Tag()) {
@@ -108,12 +112,27 @@ public class DropFrame extends JPanel implements ActionListener {
                     mp3file.setId3v2Tag(id3v2Tag);
                 }
 
+                Mp3Info info = new Mp3Info(titleField.getText(), artistField.getText());
                 id3v2Tag.setArtist(artistField.getText());
                 id3v2Tag.setTitle(titleField.getText());
+                id3v2Tag.setAlbum(info.getAlbum());
+                id3v2Tag.setYear(info.getYear());
+                //id3v2Tag.setLyrics(info.getLyrics());
 
-                mp3file.save(file.getAbsolutePath());
+                info.getAlbumArt();
+                //converting album art to byte[]
+                File img = new File("album-image.jpg");
+                BufferedImage o=ImageIO.read(img);
+                ByteArrayOutputStream b = new ByteArrayOutputStream();
+                ImageIO.write(o, "jpg", b);
+                byte[] imageInByte = b.toByteArray();
+
+
+                id3v2Tag.setAlbumImage(imageInByte, info.getAlbum());
+
+                mp3file.save(id3v2Tag.getTitle() + " - " + id3v2Tag.getArtist());
             }
-            
+
         } catch (Exception ex) {
             System.out.println("Error: No File Found!");
         }
