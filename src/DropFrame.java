@@ -1,21 +1,31 @@
+import com.google.common.base.Strings;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.Mp3File;
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class DropFrame extends JPanel implements ActionListener {
     private final String artistFieldString = "Artist";
     private final String titleFieldString = "Song Title";
+    private JTextField artistField;
+    private JTextField titleField;
     private JEditorPane mp3InfoPane;
     private JFrame frame;
+    private File file;
 
-    public DropFrame(){
+    public DropFrame() {
         //text field for artist
-        JTextField artistField = new JTextField(20);
+        artistField = new JTextField(20);
         artistField.setActionCommand(artistFieldString);
         artistField.addActionListener(this);
 
-        JTextField titleField = new JTextField(20);
+        titleField = new JTextField(20);
         titleField.setActionCommand(titleFieldString);
         titleField.addActionListener(this);
 
@@ -41,7 +51,7 @@ public class DropFrame extends JPanel implements ActionListener {
         textControlsPane.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Text Fields"),
-                        BorderFactory.createEmptyBorder(5,5,5,5)));
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
         //File drop pane
         mp3InfoPane = new JEditorPane("text/html", "");
@@ -75,19 +85,46 @@ public class DropFrame extends JPanel implements ActionListener {
         }
     }
 
-    public void actionPerformed(ActionEvent e){
-        if (artistFieldString.equals(e.getActionCommand())) {
-            JTextField source = (JTextField)e.getSource();
-        } else if (titleFieldString.equals(e.getActionCommand())) {
-            JPasswordField source = (JPasswordField)e.getSource();
+    public void actionPerformed(ActionEvent e) {
+        try {
+//            if (artistFieldString.equals(e.getActionCommand())) {
+//                JTextField source = (JTextField) e.getSource();
+//                id3v2Tag.setArtist(source.getText());
+//            } else if (titleFieldString.equals(e.getActionCommand())) {
+//                JTextField source = (JTextField) e.getSource();
+//                id3v2Tag.setTitle(source.getText());
+//            }
+
+            //if artist and title field are filled
+            if (!Strings.isNullOrEmpty(artistField.getText()) &&
+                    Strings.isNullOrEmpty(titleField.getText())){
+                Mp3File mp3file = new Mp3File(file.getAbsolutePath());
+                ID3v2 id3v2Tag;
+                if (mp3file.hasId3v2Tag()) {
+                    id3v2Tag = mp3file.getId3v2Tag();
+                } else {
+                    // mp3 does not have an ID3v2 tag, let's create one..
+                    id3v2Tag = new ID3v24Tag();
+                    mp3file.setId3v2Tag(id3v2Tag);
+                }
+
+                id3v2Tag.setArtist(artistField.getText());
+                id3v2Tag.setTitle(titleField.getText());
+
+                mp3file.save(file.getAbsolutePath());
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Error: No File Found!");
         }
     }
 
-    private void displayFiles(){
+    private void displayFiles() {
         new FileDrop(System.out, mp3InfoPane, new FileDrop.Listener() {
             public void filesDropped(java.io.File[] files) {
                 for (int i = 0; i < files.length; i++) {
                     try {
+                        file = files[i];
                         mp3InfoPane.setText("<b>PATH:      </b>" + files[i].getAbsolutePath() + "<br>" +
                                 "<b>FILE NAME: </b>" + files[i].getName());
                     }   // end try
@@ -100,16 +137,6 @@ public class DropFrame extends JPanel implements ActionListener {
         //frame.setBounds(100, 100, 500, 200);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-    }
-
-
-    private String parsePath(String path){
-        //path will be in the form file::///home.....
-        //we want only /home...., which begins from index 6
-        final int index = 6;
-        path.replaceAll("%20", " ");
-        path = path.substring(index);
-        return path;
     }
 
     public void createAndShowGUI() {
