@@ -3,12 +3,12 @@
 mp3_rename is a program that retrieves and updates the fields of an mp3 file.
 
 It currently only updates:
--release year
--album title
--album cover art
--artist
--title
--lyrics
+*release year
+*album title
+*album cover art
+*artist
+*title
+*lyrics
 
 It uses a drag-and-drop GUI built with Java swing. 
 
