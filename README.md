@@ -12,8 +12,12 @@ It currently only updates:
 
 It uses a drag-and-drop GUI built with Java swing. 
 
-##How it works:
-The program uses JSoup (https://jsoup.org/), musixmatch API Java wrapper (https://github.com/sachin-handiekar/jMusixMatch/blob/master/src/main/java/org/jmusixmatch/entity/track/MusicGenre.java), and mp3agic (https://github.com/mpatric/mp3agic/blob/master/src/main/java/com/mpatric/mp3agic/ID3v2.java).
+## How it works:
+The program uses JSoup (https://jsoup.org/)
+
+musixmatch API Java wrapper (https://github.com/sachin-handiekar/jMusixMatch/blob/master/src/main/java/org/jmusixmatch/entity/track/MusicGenre.java)
+
+mp3agic (https://github.com/mpatric/mp3agic/blob/master/src/main/java/com/mpatric/mp3agic/ID3v2.java).
 
 First, an mp3 file must be dropped and the track title and track artist have to be given.
 
