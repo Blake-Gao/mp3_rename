@@ -21,11 +21,11 @@ mp3agic (https://github.com/mpatric/mp3agic/blob/master/src/main/java/com/mpatri
 
 To get it started, an mp3 file must be dropped and the track title and track artist have to be given.
 
-TThe release year of the album and album the track belongs to is found using musixmatch API.
+The release year of the album and album the track belongs to is found using musixmatch API.
 
-Since the musixmatch wrapper doesn't provide the album cover art, the link to the track's page on musixmatch is obtained using the wrapper, then using Jsoup, the page and parsed and the link to the album covert art is retrieved. From the link, the image is downloaded, then converted to a byte[] to update the id3v2 tag.
+Since the musixmatch wrapper doesn't provide the album cover art, the link to the track's page on musixmatch is obtained using the wrapper, then using Jsoup, the page is parsed and the link to the album covert art is retrieved. From the link, the image is downloaded, then converted to a byte[] to update the id3v2 tag.
 
 For lyrics, JSoup parses through the HTML of the track page and retrieves the lyics.
 
-Using all this information retrieved, the id3v2 tags are updated accordingly.
+The fields of the id3v2 tags are then updated.
 
