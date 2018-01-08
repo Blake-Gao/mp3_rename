@@ -15,7 +15,7 @@ It uses a drag-and-drop GUI built with Java swing.
 ## How it works:
 The program uses JSoup (https://jsoup.org/)
 
-musixmatch API Java wrapper (https://github.com/sachin-handiekar/jMusixMatch/blob/master/src/main/java/org/jmusixmatch/entity/track/MusicGenre.java)
+musixmatch API Java wrapper (https://github.com/sachin-handiekar/jMusixMatch/blob/master/src/main/java/org/jmusixmatch/)
 
 mp3agic (https://github.com/mpatric/mp3agic/blob/master/src/main/java/com/mpatric/mp3agic/ID3v2.java).
 
